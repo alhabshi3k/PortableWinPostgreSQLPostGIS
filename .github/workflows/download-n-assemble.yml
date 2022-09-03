@@ -1,0 +1,128 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI Portable Postgresql and PostGIS for Windows 
+# to follow for learning
+# https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners
+# https://docs.github.com/en/actions/learn-github-actions/environment-variables
+# https://github.com/FranzDiebold/github-env-vars-action
+# https://github.com/sdras/awesome-actions
+# about artifacts:
+# https://docs.github.com/en/rest/actions/artifacts
+
+# https://github.com/actions/checkout
+#
+# https://github.com/actions/create-release
+# https://github.com/actions/publish-action
+# https://github.com/actions/download-artifact
+# https://github.com/actions/cache
+
+# To USE LATER
+# https://github.com/crazy-max/ghaction-upx
+
+# for Branding
+# https://github.com/haya14busa/github-action-brandings
+
+# Tested and worked well
+# https://github.com/marketplace/actions/tag-release-on-push-action
+
+# Controls when the workflow will run
+
+# download sites:
+# FOR PostgreSQL windows binaries
+# - https://www.enterprisedb.com/download-postgresql-binaries
+# - Note: need web scraping to extract the latest version.
+# FOR PostGIS binraries, that include pgrouting, pgpointcloud
+# http://download.osgeo.org/postgis/windows/$PG_RELEASE/  where $PG_RELEASE something like pg14
+# - Note: Better to use web scraping to extract the latest version that match the PostgreSQL Major number version
+# FOR experimental build https://winnie.postgis.net/download/windows/pg14/buildbot/
+
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+   branches: [ "main" , "master" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  ARCH: x64
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+jobs:
+  Download_PostGIS:     
+    runs-on: ubuntu-latest # 20.04.4
+    outputs:
+      PG_RELEASE: ${{ steps.get_versions.outputs.PG_RELEASE}}
+      pg_link: ${{ steps.get_versions.outputs.pg_link}}
+      postgis_link: ${{ steps.get_versions.outputs.postgis_link}}
+      PostGIS_VER: ${{ steps.get_versions.outputs.PostGIS_VER}}
+      packed_file: ${{ steps.get_versions.outputs.packed_file}}
+      changelog: |
+         Updates and upgrades to PostgreSQL ${{ steps.get_versions.outputs.PG_RELEASE}} and PostGIS ${{ steps.get_versions.outputs.PostGIS_VER}}
+    steps:
+      - uses: actions/setup-python@master
+        with:
+          python-version: "3.10"
+      - run: |
+          echo "🐧 The job was automatically triggered by a ${{ github.event_name }} event and running on a ${{ runner.os }} server hosted by GitHub!"
+          echo "🔎 The name of your branch is ${{ github.ref }} of ${{ github.repository }} repository."
+      - uses: actions/checkout@master
+      - id: get_versions
+        run: |
+          echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+          echo "🖥️ The workflow is now ready to test your code on the runner."
+          # echo "Downloading http://download.osgeo.org/postgis/windows/$PG_RELEASE/postgis-bundle-$PG_RELEASE-$PostGIS_VER$ARCH.zip."
+          mkdir downloads
+          cd downloads
+          # wget -nv http://download.osgeo.org/postgis/windows/$PG_RELEASE/postgis-bundle-$PG_RELEASE-$PostGIS_VER$ARCH.zip
+          # echo "🎉 The postgis-bundle-$PG_RELEASE-$PostGIS_VER$ARCH.zip file was DOWNLOADED.🎉"
+          echo "**$(python --version) is used for processing the script **"
+          read -r PG_RELEASE pg_link PostGIS_VER postgis_link packed_file <<<$(python ../.github/workflows/get-links_postgreSQL-PostGIS.py)
+          echo "PostgreSQL $PG_RELEASE on $pg_link"
+          echo "PostGIS v$PostGIS_VER on $postgis_link"
+          echo "Portable PostgeSQL with PostGIS download link is $packed_file"
+          echo "::set-output name=PG_RELEASE::$PG_RELEASE"
+          echo "::set-output name=PostGIS_VER::$PostGIS_VER"
+          echo "::set-output name=packed_file::$packed_file"
+          echo "files in workspace ${{ github.workspace }} are:"
+          ls ${{ github.workspace }}
+          echo "---------------------------"
+          echo "files in workspace ${{ github.workspace }}/downloads are:"
+          ls ${{ github.workspace }}/downloads
+          echo "---------------------------"
+          echo "🍏 This job's status is ${{ job.status }}."
+      - id: upload_artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: new_packed_file
+          path: ${{ github.workspace }}/downloads/*
+
+          # path: downloads/${{ steps.get_versions.outputs.packed_file}}
+          if-no-files-found: error # 'warn' or 'ignore' are also available, defaults to `warn`
+  release:
+    runs-on: ubuntu-latest
+    needs: [ Download_PostGIS ]
+    steps:
+      - uses: actions/checkout@master
+      - name: Download math result for job 2
+        id: download
+        uses: actions/download-artifact@master
+        with:
+          name: new_packed_file
+          path: downloads
+      - id: create_release
+        uses: actions/create-release@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+          packed_file : ${{  needs.Download_PostGIS.outputs.packed_file }}
+        with:
+          tag_name: ${{ needs.Download_PostGIS.outputs.PG_RELEASE }}-postgis-${{needs.Download_PostGIS.outputs.PostGIS_VER}}
+          release_name: ${{ needs.Download_PostGIS.outputs.packed_file }}
+          body: |
+            A Good start 
+            ${{ needs.Download_PostGIS.outputs.changelog }}
+            PostgreSQL version is ${{ needs.Download_PostGIS.outputs.PG_RELEASE }}
+            PostGIS version is ${{needs.Download_PostGIS.outputs.PostGIS_VER}}
+            The PACKED File IS ${{ needs.Download_PostGIS.outputs.packed_file }} OR ${{ steps.create_release.env.packed_file }}
+          draft: false
+          prerelease: true
+          
