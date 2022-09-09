@@ -94,9 +94,9 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: new_packed_file
-          path: ${{ github.workspace }}/downloads/*
-
-          # path: downloads/${{ steps.get_versions.outputs.packed_file}}
+          # path: ${{ github.workspace }}/downloads/*
+          # For the above line to be general , it is better to delete other files () and folders (PgSQL)
+          path: ${{ github.workspace }}/downloads/${{ steps.get_versions.outputs.packed_file}}
           if-no-files-found: error # 'warn' or 'ignore' are also available, defaults to `warn`
   release:
     runs-on: ubuntu-latest
