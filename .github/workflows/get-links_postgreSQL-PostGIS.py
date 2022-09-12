@@ -158,13 +158,13 @@ download_dir = Path("downloads")
 download_dir.mkdir(parents=True, exist_ok=True)
 
 packed_file = f"Portable-PG{pg_ver}-PostGIS-v{postgis_ver}"
-packed_file = make_archive( download_dir / packed_file , "zip", root_dir = extraction_dir.parent, base_dir = extraction_dir )  # zipping the directory
+
 
 print("zipping all => ", end=" ")
-zipped_file = make_archive( f"Portable-PG{pg_ver}-PostGIS-v{postgis_ver}", "zip", extraction_dir.parent, extraction_dir )  # zipping the directory
+packed_file = make_archive( download_dir / packed_file , "zip", root_dir = extraction_dir.parent, base_dir = extraction_dir )  # zipping the directory
 print(" DONE")
 
 ## Try to leave the option of compression the folde to GithubActions.
 
 # rmtree(extraction_dir, ignore_errors=True) # It didn't work
-print (zipped_file)
+print(f"{pg_ver}", download_links['pgsql'], postgis_ver, download_links['postgis'], f"{packed_file}.zip")
