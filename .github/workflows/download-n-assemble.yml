@@ -77,7 +77,7 @@ jobs:
           # echo "🎉 The postgis-bundle-$PG_RELEASE-$PostGIS_VER$ARCH.zip file was DOWNLOADED.🎉"
           echo "**$(python --version) is used for processing the script **"
           # The Python script will do most of th job, including MkDir downloads
-          read -r PG_RELEASE pg_link PostGIS_VER postgis_link packed_file <<<$(python ../.github/workflows/get-links_postgreSQL-PostGIS.py)
+          read -r PG_RELEASE pg_link PostGIS_VER postgis_link packed_file <<<$(python .github/workflows/get-links_postgreSQL-PostGIS.py)
           echo "PostgreSQL $PG_RELEASE on $pg_link"
           echo "PostGIS v$PostGIS_VER on $postgis_link"
           echo "Portable PostgeSQL with PostGIS download link is $packed_file"
