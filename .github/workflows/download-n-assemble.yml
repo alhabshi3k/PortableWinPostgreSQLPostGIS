@@ -71,11 +71,12 @@ jobs:
           echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
           echo "🖥️ The workflow is now ready to test your code on the runner."
           # echo "Downloading http://download.osgeo.org/postgis/windows/$PG_RELEASE/postgis-bundle-$PG_RELEASE-$PostGIS_VER$ARCH.zip."
-          mkdir downloads
-          cd downloads
+          # mkdir downloads
+          # cd downloads
           # wget -nv http://download.osgeo.org/postgis/windows/$PG_RELEASE/postgis-bundle-$PG_RELEASE-$PostGIS_VER$ARCH.zip
           # echo "🎉 The postgis-bundle-$PG_RELEASE-$PostGIS_VER$ARCH.zip file was DOWNLOADED.🎉"
           echo "**$(python --version) is used for processing the script **"
+          # The Python script will do most of th job, including MkDir downloads
           read -r PG_RELEASE pg_link PostGIS_VER postgis_link packed_file <<<$(python ../.github/workflows/get-links_postgreSQL-PostGIS.py)
           echo "PostgreSQL $PG_RELEASE on $pg_link"
           echo "PostGIS v$PostGIS_VER on $postgis_link"
@@ -94,9 +95,9 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: new_packed_file
-          # path: ${{ github.workspace }}/downloads/*
-          # For the above line to be general , it is better to delete other files () and folders (PgSQL)
-          path: ${{ github.workspace }}/downloads/${{ steps.get_versions.outputs.packed_file}}
+          path: ${{ github.workspace }}/downloads
+
+          # path: downloads/${{ steps.get_versions.outputs.packed_file}}
           if-no-files-found: error # 'warn' or 'ignore' are also available, defaults to `warn`
   release:
     runs-on: ubuntu-latest

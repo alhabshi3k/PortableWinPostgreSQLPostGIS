@@ -25,7 +25,7 @@
 # cat temp.JSON | grep -Eo ' [0-9]{,2}\.[0-9]{,2}' | awk 'max<$0 || NR==1{ max=$0} END{print max}'
 # ```
 
-# In[1]:
+# In[ ]:
 
 
 import json, time, re #  os, shutil
@@ -38,7 +38,7 @@ dl , pg= "download", 'postg'
 download_links = {'pgsql': f"https://www.enterprisedb.com/{dl}-{pg}resql-binaries/" , 'postgis': f"http://{dl}.osgeo.org/{pg}is/{o_s}/"}
 
 
-# In[2]:
+# In[ ]:
 
 
 # --- The Following code was for situation when the links encapsuled in JSON - Something have changed to page
@@ -48,6 +48,7 @@ download_links = {'pgsql': f"https://www.enterprisedb.com/{dl}-{pg}resql-binarie
 
 # txt_start = f'{o_s}" href="'
 
+# In[ ]:
 # pg_ver = str(max( float(r) for r in re.findall(' ([0-9]{,2}\.[0-9]{,2})', JSON_conext) ))   # get the least version of stable postgreSQL
 # temp_json = json.loads( JSON_conext )["props"]["pageProps"]["content"].split("<b>Version ")
 # scrap = { r[:4]: r[r.rfind(txt_start)+ len(txt_start):r.rindex('"><',None,r.find(f"{o_s}_sm_{arch}"))]  for r in temp_json if r[:2].isdigit() }
@@ -68,7 +69,8 @@ download_links['pgsql'] = urlopen(link).geturl()
 # download_links['pgsql'] # testing
 
 
-# In[3]:
+# In[ ]:
+
 
 
 # get the latest crosspond PostgreSQL version that PostGIS is compiled for.
@@ -83,7 +85,7 @@ download_links['postgis'] = f"{download_links['postgis']}{pg_ver_Postgis}{dfile}
 postgis_ver = download_links['postgis'][download_links['postgis'].rfind("-")+1:download_links['postgis'].rfind("x")]
 
 
-# In[4]:
+# In[ ]:
 
 
 # Report Information
@@ -100,7 +102,7 @@ extraction_dir = Path("pgsql")
 extraction_dir.mkdir(parents=True, exist_ok=True)
 
 
-# In[5]:
+# In[ ]:
 
 
 for link in download_links.values():
@@ -126,7 +128,7 @@ for link in download_links.values():
         rmtree(possible_unpacked_path)
 
 
-# In[7]:
+# In[ ]:
 
 
 ## TODO 
@@ -147,12 +149,22 @@ print(" DONE")
 # copy Batchfile scripts and other helpful light programs
 
 
-# In[7]:
+# In[ ]:
 
 
 # Final Archive The Whole Directory.
+
+download_dir = Path("downloads")
+download_dir.mkdir(parents=True, exist_ok=True)
+
+packed_file = f"Portable-PG{pg_ver}-PostGIS-v{postgis_ver}"
+packed_file = make_archive( download_dir / packed_file , "zip", root_dir = extraction_dir.parent, base_dir = extraction_dir )  # zipping the directory
+
 print("zipping all => ", end=" ")
 zipped_file = make_archive( f"Portable-PG{pg_ver}-PostGIS-v{postgis_ver}", "zip", extraction_dir.parent, extraction_dir )  # zipping the directory
 print(" DONE")
+
 ## Try to leave the option of compression the folde to GithubActions.
+
+# rmtree(extraction_dir, ignore_errors=True) # It didn't work
 print (zipped_file)
