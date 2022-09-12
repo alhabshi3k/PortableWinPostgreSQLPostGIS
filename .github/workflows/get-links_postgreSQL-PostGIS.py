@@ -88,18 +88,28 @@ postgis_ver = download_links['postgis'][download_links['postgis'].rfind("-")+1:d
 # In[ ]:
 
 
-# Report Information
-# ------------------
-print(f"PostgreSQL version : pg{pg_ver}", F"PostGIS version: {postgis_ver}", sep="\n")
-[ print(f"- {link} : {v}") for link,v in download_links.items() ][0]
+# Setting up folders and packed file name
+# ----------------------------------------
+from pathlib import Path
+extraction_dir = Path("pgsql")
+extraction_dir.mkdir(parents=True, exist_ok=True)
+download_dir = Path("downloads")
+download_dir.mkdir(parents=True, exist_ok=True)
+
+packed_file = download_dir / f"Portable-PG{pg_ver}-PostGIS-v{postgis_ver}"
+
 
 
 # In[6]:
 
 
-from pathlib import Path
-extraction_dir = Path("pgsql")
-extraction_dir.mkdir(parents=True, exist_ok=True)
+# Sending information to Systen environment
+# -----------------------------------------
+print(f"{pg_ver}", download_links['pgsql'], postgis_ver, download_links['postgis'], f"{packed_file}.zip")
+# Report Information
+# ------------------
+print(f"PostgreSQL version : pg{pg_ver}", F"PostGIS version: {postgis_ver}", sep="\n")
+[ print(f"- {link} : {v}") for link,v in download_links.items() ].pop()
 
 
 # In[ ]:
@@ -153,18 +163,12 @@ print(" DONE")
 
 
 # Final Archive The Whole Directory.
-
-download_dir = Path("downloads")
-download_dir.mkdir(parents=True, exist_ok=True)
-
-packed_file = f"Portable-PG{pg_ver}-PostGIS-v{postgis_ver}"
-
-
 print("zipping all => ", end=" ")
-packed_file = make_archive( download_dir / packed_file , "zip", root_dir = extraction_dir.parent, base_dir = extraction_dir )  # zipping the directory
+packed_file = make_archive( packed_file , "zip", root_dir = extraction_dir.parent, base_dir = extraction_dir )  # zipping the directory
 print(" DONE")
 
 ## Try to leave the option of compression the folde to GithubActions.
 
 # rmtree(extraction_dir, ignore_errors=True) # It didn't work
-print(f"{pg_ver}", download_links['pgsql'], postgis_ver, download_links['postgis'], f"{packed_file}.zip")
+
+
