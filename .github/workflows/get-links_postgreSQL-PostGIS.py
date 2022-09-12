@@ -28,7 +28,7 @@
 # In[ ]:
 
 
-import json, time, re #  os, shutil
+import json, time, re ,  os, shutil
 from urllib.request import urlopen, urlretrieve
 from zipfile import ZipFile, Path
 from shutil import move, rmtree, copytree, make_archive
@@ -91,11 +91,11 @@ postgis_ver = download_links['postgis'][download_links['postgis'].rfind("-")+1:d
 # Setting up folders and packed file name
 # ----------------------------------------
 from pathlib import Path
-extraction_dir = Path("pgsql")
-extraction_dir.mkdir(parents=True, exist_ok=True)
+
 download_dir = Path("downloads")
 download_dir.mkdir(parents=True, exist_ok=True)
-
+extraction_dir = download_dir / Path("pgsql")
+extraction_dir.mkdir(parents=True, exist_ok=True)
 packed_file = download_dir / f"Portable-PG{pg_ver}-PostGIS-v{postgis_ver}"
 
 
@@ -115,6 +115,7 @@ print(f"PostgreSQL version : pg{pg_ver}", F"PostGIS version: {postgis_ver}", sep
 # In[ ]:
 
 
+os.chdir(download_dir)
 for link in download_links.values():
     print(f"Downloading  {link} ==> " , end=" ")
     # zipfile = link.rsplit('/').pop()
@@ -163,9 +164,9 @@ print(" DONE")
 
 
 # Final Archive The Whole Directory.
-print("zipping all => ", end=" ")
-packed_file = make_archive( packed_file , "zip", root_dir = extraction_dir.parent, base_dir = extraction_dir )  # zipping the directory
-print(" DONE")
+# print("zipping all => ", end=" ")
+# packed_file = make_archive( packed_file , "zip", root_dir = extraction_dir.parent, base_dir = extraction_dir )  # zipping the directory
+# print(" DONE")
 
 ## Try to leave the option of compression the folde to GithubActions.
 
