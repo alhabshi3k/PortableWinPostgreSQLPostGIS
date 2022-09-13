@@ -95,7 +95,7 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: new_packed_file
-          path: ${{ github.workspace }}/downloads
+          path: ${{ github.workspace }}/downloads/${{ steps.get_versions.outputs.packed_file}}
 
           # path: downloads/${{ steps.get_versions.outputs.packed_file}}
           if-no-files-found: error # 'warn' or 'ignore' are also available, defaults to `warn`
