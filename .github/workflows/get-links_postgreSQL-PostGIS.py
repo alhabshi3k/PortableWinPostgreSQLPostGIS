@@ -115,8 +115,8 @@ for link in download_links.values():
     print(f"Downloading  {link} ==> " , end=" ")
     filename = link[link.rfind("/")+1:]
     # filename = link.rsplit('/').pop()  or link[link.rfind("/")+1:]
-    # zipfile = ZipFile(urlretrieve(link,filename= link.rsplit('/').pop())[0])
-    zipfile = ZipFile(filename) or ZipFile(urlretrieve(link,filename= filename )[0])
+    # zipfile = ZipFile(filename)        or ZipFile(urlretrieve(link,filename= filename )[0])
+    zipfile = ZipFile(urlretrieve(link,filename= filename )[0])
     print(f" DONE")
     print(f"- Extracting  {zipfile.filename} ==> " , end=" "); print( (zipfile.extractall(), f"DONE")[1] )
     possible_unpacked_path = Path(zipfile.filename[:-len(".zip")])
