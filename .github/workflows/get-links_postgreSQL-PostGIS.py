@@ -28,7 +28,7 @@
 # In[ ]:
 
 
-import json, time, re ,  os, shutil
+import json, time, re , os, shutil
 from urllib.request import urlopen, urlretrieve
 from zipfile import ZipFile, Path
 from shutil import move, rmtree, copytree, make_archive
@@ -48,7 +48,6 @@ download_links = {'pgsql': f"https://www.enterprisedb.com/{dl}-{pg}resql-binarie
 
 # txt_start = f'{o_s}" href="'
 
-# In[ ]:
 # pg_ver = str(max( float(r) for r in re.findall(' ([0-9]{,2}\.[0-9]{,2})', JSON_conext) ))   # get the least version of stable postgreSQL
 # temp_json = json.loads( JSON_conext )["props"]["pageProps"]["content"].split("<b>Version ")
 # scrap = { r[:4]: r[r.rfind(txt_start)+ len(txt_start):r.rindex('"><',None,r.find(f"{o_s}_sm_{arch}"))]  for r in temp_json if r[:2].isdigit() }
@@ -72,7 +71,6 @@ download_links['pgsql'] = urlopen(link).geturl()
 # In[ ]:
 
 
-
 # get the latest crosspond PostgreSQL version that PostGIS is compiled for.
 res = urlopen(download_links['postgis']).read().decode().splitlines()
 # pg_ver_Postgis  = max( href[href.find("pg"):href.find("/")+1] for href in res if any([time.strftime("%Y-%b", time.gmtime()) in href,  href.find("pg9") < 0, href.find("pg") > 0]) )
@@ -91,7 +89,6 @@ postgis_ver = download_links['postgis'][download_links['postgis'].rfind("-")+1:d
 # Setting up folders and packed file name
 # ----------------------------------------
 from pathlib import Path
-
 download_dir = Path("downloads")
 download_dir.mkdir(parents=True, exist_ok=True)
 extraction_dir = download_dir / Path("pgsql")
@@ -99,8 +96,7 @@ extraction_dir.mkdir(parents=True, exist_ok=True)
 packed_file = download_dir / f"Portable-PG{pg_ver}-PostGIS-v{postgis_ver}"
 
 
-
-# In[6]:
+# In[ ]:
 
 
 # Sending information to Systen environment
@@ -115,28 +111,25 @@ print(f"PostgreSQL version : pg{pg_ver}", F"PostGIS version: {postgis_ver}", sep
 # In[ ]:
 
 
-os.chdir(download_dir)
 for link in download_links.values():
     print(f"Downloading  {link} ==> " , end=" ")
-    # zipfile = link.rsplit('/').pop()
-    zipfile = ZipFile(urlretrieve(link,filename= link.rsplit('/').pop())[0])
+    # zipfile = link.rsplit('/').pop()  or link[link.rfind("/")+1:]
+    # zipfile = ZipFile(urlretrieve(link,filename= link.rsplit('/').pop())[0])
+    zipfile = ZipFile(link[link.rfind("/")+1:])
     print(f" DONE")
-    
+    print(f"- Extracting  {zipfile.filename} ==> " , end=" "); print( (zipfile.extractall(), f"DONE")[1] )
+    possible_unpacked_path = Path(zipfile.filename[:-len(".zip")])
     # Get Root/Main directories in zip file, 
     # in case the zipping process was one directory and the then the zipped file have the same filename.
     root_dirs = [f.filename for f in zipfile.filelist if f.filename.count("/") == 1 and f.filename.endswith("/")] 
-    
-    print(f"- Extracting  {zipfile.filename} ==> " , end=" "); print( (zipfile.extractall(), f"DONE")[1] )
-    
-    possible_unpacked_path = Path(zipfile.filename[:-len(".zip")])
     if possible_unpacked_path.is_dir() or len(root_dirs) == 1: 
         root_dir = Path(root_dirs.pop()[:-len("/")])    
-        if extraction_dir.name is root_dir.name: continue 
+        # if extraction_dir.name is root_dir.name: continue 
         for f in root_dir.glob("*"): 
             if f.name in (root_dir.name, ".ipynb_checkpoints") : continue
             if f.is_file():  move( f, extraction_dir )  
             else: copytree(f, extraction_dir / Path(f.parts[1]), dirs_exist_ok=True); rmtree(f)
-        rmtree(possible_unpacked_path)
+        rmtree(root_dir)
 
 
 # In[ ]:
@@ -163,7 +156,7 @@ print(" DONE")
 # In[ ]:
 
 
-# Final Archive The Whole Directory.
+# Final Archive The Whole Directory. or let Github action do The Archiveing and produce Zip file
 # print("zipping all => ", end=" ")
 # packed_file = make_archive( packed_file , "zip", root_dir = extraction_dir.parent, base_dir = extraction_dir )  # zipping the directory
 # print(" DONE")
@@ -172,4 +165,7 @@ print(" DONE")
 
 # rmtree(extraction_dir, ignore_errors=True) # It didn't work
 
+# TODO:
+# - DELETE the Downloaded zipped file
+# - DELETE the pgsql folder 
 
