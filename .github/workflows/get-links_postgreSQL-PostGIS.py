@@ -91,7 +91,7 @@ postgis_ver = download_links['postgis'][download_links['postgis'].rfind("-")+1:d
 from pathlib import Path
 download_dir = Path("downloads")
 download_dir.mkdir(parents=True, exist_ok=True)
-extraction_dir = download_dir / Path("pgsql")
+extraction_dir = Path("pgsql")
 extraction_dir.mkdir(parents=True, exist_ok=True)
 packed_file = download_dir / f"Portable-PG{pg_ver}-PostGIS-v{postgis_ver}"
 
@@ -125,7 +125,7 @@ for link in download_links.values():
     root_dirs = [f.filename for f in zipfile.filelist if f.filename.count("/") == 1 and f.filename.endswith("/")] 
     if possible_unpacked_path.is_dir() or len(root_dirs) == 1: 
         root_dir = Path(root_dirs.pop()[:-len("/")])    
-        # if extraction_dir.name is root_dir.name: continue 
+        if extraction_dir.name is root_dir.name: continue 
         for f in root_dir.glob("*"): 
             if f.name in (root_dir.name, ".ipynb_checkpoints") : continue
             if f.is_file():  move( f, extraction_dir )  
@@ -158,9 +158,9 @@ print(" DONE")
 
 
 # Final Archive The Whole Directory. or let Github action do The Archiveing and produce Zip file
-# print("zipping all => ", end=" ")
-# packed_file = make_archive( packed_file , "zip", root_dir = extraction_dir.parent, base_dir = extraction_dir )  # zipping the directory
-# print(" DONE")
+print("zipping all => ", end=" ")
+packed_file = make_archive( packed_file , "zip", root_dir = extraction_dir.parent, base_dir = extraction_dir )  # zipping the directory
+print(" DONE")
 
 ## Try to leave the option of compression the folde to GithubActions.
 
