@@ -113,9 +113,10 @@ print(f"PostgreSQL version : pg{pg_ver}", F"PostGIS version: {postgis_ver}", sep
 
 for link in download_links.values():
     print(f"Downloading  {link} ==> " , end=" ")
-    # zipfile = link.rsplit('/').pop()  or link[link.rfind("/")+1:]
+    filename = link[link.rfind("/")+1:]
+    # filename = link.rsplit('/').pop()  or link[link.rfind("/")+1:]
     # zipfile = ZipFile(urlretrieve(link,filename= link.rsplit('/').pop())[0])
-    zipfile = ZipFile(link[link.rfind("/")+1:])
+    zipfile = ZipFile(filename) OR ZipFile(urlretrieve(link,filename= filename )[0])
     print(f" DONE")
     print(f"- Extracting  {zipfile.filename} ==> " , end=" "); print( (zipfile.extractall(), f"DONE")[1] )
     possible_unpacked_path = Path(zipfile.filename[:-len(".zip")])
