@@ -38,8 +38,8 @@ name: (temp) CI Portable Postgresql and PostGIS for Windows
 
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
-  # push:
-   #  branches: [ "main" , "master" ]
+  push:
+    branches: [ "main" , "master" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -77,19 +77,23 @@ jobs:
           # echo "🎉 The postgis-bundle-$PG_RELEASE-$PostGIS_VER$ARCH.zip file was DOWNLOADED.🎉"
           echo "**$(python --version) is used for processing the script **"
           # The Python script will do most of th job, including MkDir downloads
-          read -r PG_RELEASE pg_link PostGIS_VER postgis_link packed_file <<<$(python .github/workflows/get-links_postgreSQL-PostGIS.py)
-          echo "PostgreSQL $PG_RELEASE on $pg_link"
-          echo "PostGIS v$PostGIS_VER on $postgis_link"
-          echo "Portable PostgeSQL with PostGIS download link is $packed_file"
-          echo "::set-output name=PG_RELEASE::$PG_RELEASE"
-          echo "::set-output name=PostGIS_VER::$PostGIS_VER"
-          echo "::set-output name=packed_file::$packed_file"
+          # read -r PG_RELEASE pg_link PostGIS_VER postgis_link packed_file <<<$(python .github/workflows/get-links_postgreSQL-PostGIS.py)
+          # echo "PostgreSQL $PG_RELEASE on $pg_link"
+          # echo "PostGIS v$PostGIS_VER on $postgis_link"
+          # echo "Portable PostgeSQL with PostGIS download link is $packed_file"
+          # echo "::set-output name=PG_RELEASE::$PG_RELEASE"
+          # echo "::set-output name=PostGIS_VER::$PostGIS_VER"
+          # echo "::set-output name=packed_file::$packed_file"
           echo "files in workspace ${{ github.workspace }} are:"
           ls ${{ github.workspace }}
           echo "---------------------------"
           echo "files in workspace ${{ github.workspace }}/downloads are:"
           ls ${{ github.workspace }}/downloads
           echo "---------------------------"
+          wget -nv https://mega.nz/file/Vo10HBwS#S-WoaWcSt8PYYVTclazC6r4-GTR8ynLVVUxy1gIzs90
+          echo "::set-output name=PG_RELEASE::14.5"
+          echo "::set-output name=PostGIS_VER::3.2.3"
+          echo "::set-output name=packed_file::Portable-PG14.5-PostGIS-v3.2.3.zip"
           echo "🍏 This job's status is ${{ job.status }}."        
       - id: upload_artifact
         uses: actions/upload-artifact@master
