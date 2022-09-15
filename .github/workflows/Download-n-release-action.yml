@@ -121,6 +121,7 @@ jobs:
           # token: ${{ secrets.GITHUB_TOKEN }}
           # title: "Development Build, preRelease and a Draft"
           # automatic_release_tag: "PG${{ needs.Download_PostGIS.outputs.PG_RELEASE }}-postgis-${{ needs.Download_PostGIS.outputs.PostGIS_VER}}-${{ env.NOW }}"
+          tag : "PG${{ needs.Download_PostGIS.outputs.PG_RELEASE }}-postgis-${{ needs.Download_PostGIS.outputs.PostGIS_VER}}-${{ env.NOW }}"
           prerelease: true
           draft: true
           # files: "${{ github.workspace }}/${{ needs.Download_PostGIS.outputs.packed_file}}"
