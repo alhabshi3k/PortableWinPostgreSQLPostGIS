@@ -105,13 +105,16 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ Download_PostGIS ]
     steps:  
+      - name: set env
+        run: echo "NOW=$(date +'%Y.%m.%d')" >> $GITHUB_ENV
       - name: Release
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "PG${{ env.PG_RELEASE }}-postgis-${{ env.PostGIS_VER}}.latest"
+          automatic_release_tag: "PG${{ needs.Download_PostGIS.outputs.PG_RELEASE }}-postgis-${{ needs.Download_PostGIS.outputs.PostGIS_VER}}.${{ env.NOW }}"
           prerelease: true
-          files: "${{ github.workspace }}/${{ env.packed_file}}"
+          draft: true
+          files: "${{ github.workspace }}/${{ needs.Download_PostGIS.outputs.packed_file}}"
           # bodyFile: "body.md"
 
 
