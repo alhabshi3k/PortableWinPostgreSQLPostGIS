@@ -38,8 +38,8 @@ name: (temp) CI Portable Postgresql and PostGIS for Windows
 
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "main" , "master" ]
+  # push:
+  #   branches: [ "main" , "master" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -79,20 +79,23 @@ jobs:
           # echo "🎉 The postgis-bundle-$PG_RELEASE-$PostGIS_VER$ARCH.zip file was DOWNLOADED.🎉"
           echo "**$(python --version) is used for processing the script **"
           # The Python script will do most of th job, including MkDir downloads
-          # read -r PG_RELEASE pg_link PostGIS_VER postgis_link packed_file <<<$(python .github/workflows/get-links_postgreSQL-PostGIS.py)
+          read -r PG_RELEASE pg_link PostGIS_VER postgis_link packed_file <<<$(python .github/workflows/get-links_postgreSQL-PostGIS.py)
+          echo "PG_RELEASE=$PG_RELEASE" >> $GITHUB_ENV
+          echo "PostGIS_VER=PostGIS_VER" >> $GITHUB_ENV
+          echo "packed_file=$packed_file" >> $GITHUB_ENV
           # echo "PostgreSQL $PG_RELEASE on $pg_link"
           # echo "PostGIS v$PostGIS_VER on $postgis_link"
           # echo "Portable PostgeSQL with PostGIS download link is $packed_file"
           # echo "::set-output name=PG_RELEASE::$PG_RELEASE"
           # echo "::set-output name=PostGIS_VER::$PostGIS_VER"
           # echo "::set-output name=packed_file::$packed_file"
-          wget -nv https://github.com/alhabshi3k/alhabshi3k.github.io/raw/master/pocketbase_0.7.2_windows_amd64.zip
-          echo "::set-output name=PG_RELEASE::14.5"
-          echo "::set-output name=PostGIS_VER::3.2.3"
-          echo "::set-output name=packed_file::downloads/pocketbase_0.7.2_windows_amd64.zip"
-          echo "PG_RELEASE=14.5" >> $GITHUB_ENV
-          echo "PostGIS_VER=3.2.3" >> $GITHUB_ENV
-          echo "packed_file=downloads/pocketbase_0.7.2_windows_amd64.zip" >> $GITHUB_ENV
+          # wget -nv https://github.com/alhabshi3k/alhabshi3k.github.io/raw/master/pocketbase_0.7.2_windows_amd64.zip
+          # echo "::set-output name=PG_RELEASE::14.5"
+          # echo "::set-output name=PostGIS_VER::3.2.3"
+          # echo "::set-output name=packed_file::downloads/pocketbase_0.7.2_windows_amd64.zip"
+          # echo "PG_RELEASE=14.5" >> $GITHUB_ENV
+          # echo "PostGIS_VER=3.2.3" >> $GITHUB_ENV
+          # echo "packed_file=downloads/pocketbase_0.7.2_windows_amd64.zip" >> $GITHUB_ENV
           echo "files in workspace ${{ github.workspace }} are:"
           ls ${{ github.workspace }}
           echo "---------------------------"
@@ -112,7 +115,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ Download_PostGIS ]
     steps:
-      - uses: actions/checkout@master  
+      # - uses: actions/checkout@master  
       - name: Download math result for job 2
         id: download
         uses: actions/download-artifact@master
