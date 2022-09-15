@@ -98,13 +98,12 @@ jobs:
           echo "---------------------------"
           echo "🍏 This job's status is ${{ job.status }}."  
       - name: Release
-        uses: ncipollo/release-action@v1
+        uses: "marvinpinto/action-automatic-releases@latest"
         with:
-          commit: PG${{ needs.Download_PostGIS.outputs.PG_RELEASE }}-postgis-${{needs.Download_PostGIS.outputs.PostGIS_VER}}.*
-          token: ${{ secrets.GITHUB_TOKEN }}
-          tag : ${{ needs.Download_PostGIS.outputs.PG_RELEASE }}-postgis-${{needs.Download_PostGIS.outputs.PostGIS_VER}}
-          artifacts: "${{ github.workspace }}/${{ steps.get_versions.outputs.packed_file}}"
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "PG${{ needs.Download_PostGIS.outputs.PG_RELEASE }}-postgis-${{needs.Download_PostGIS.outputs.PostGIS_VER}}.latest.*"
           prerelease: true
+          files: "${{ github.workspace }}/${{ steps.get_versions.outputs.packed_file}}"
           # bodyFile: "body.md"
 
 
