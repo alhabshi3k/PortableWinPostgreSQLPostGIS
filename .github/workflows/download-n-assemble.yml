@@ -104,7 +104,7 @@ jobs:
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "PG${{ env.PG_RELEASE }}-postgis-${{ env.PostGIS_VER}}.latest.*"
+          automatic_release_tag: "PG${{ env.PG_RELEASE }}-postgis-${{ env.PostGIS_VER}}.latest"
           prerelease: true
           files: "${{ github.workspace }}/${{ env.packed_file}}"
           # bodyFile: "body.md"
