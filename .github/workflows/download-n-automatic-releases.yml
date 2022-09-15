@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI Portable Postgresql and PostGIS for Windows 
+name: Using Python Script and action-automatic-releases
 # to follow for learning
 # https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners
 # https://docs.github.com/en/actions/learn-github-actions/environment-variables
@@ -12,6 +12,7 @@ name: CI Portable Postgresql and PostGIS for Windows
 # https://github.com/actions/checkout
 #
 # https://github.com/actions/create-release
+# https://github.com/marvinpinto/action-automatic-releases
 # https://github.com/actions/publish-action
 # https://github.com/actions/download-artifact
 # https://github.com/actions/cache
@@ -83,12 +84,14 @@ jobs:
           echo "PG_RELEASE=$PG_RELEASE" >> $GITHUB_ENV
           echo "PostGIS_VER=PostGIS_VER" >> $GITHUB_ENV
           echo "packed_file=$packed_file" >> $GITHUB_ENV
-          # echo "PostgreSQL $PG_RELEASE on $pg_link"
-          # echo "PostGIS v$PostGIS_VER on $postgis_link"
-          # echo "Portable PostgeSQL with PostGIS download link is $packed_file"
           # echo "::set-output name=PG_RELEASE::$PG_RELEASE"
           # echo "::set-output name=PostGIS_VER::$PostGIS_VER"
           # echo "::set-output name=packed_file::$packed_file"
+          # echo "PostgreSQL $PG_RELEASE on $pg_link"
+          # echo "PostGIS v$PostGIS_VER on $postgis_link"
+          # echo "Portable PostgeSQL with PostGIS download link is $packed_file"
+
+          # -------------- Test files ------------------------
           # wget -nv https://github.com/alhabshi3k/alhabshi3k.github.io/raw/master/pocketbase_0.7.2_windows_amd64.zip
           # echo "::set-output name=PG_RELEASE::14.5"
           # echo "::set-output name=PostGIS_VER::3.2.3"
@@ -96,6 +99,7 @@ jobs:
           # echo "PG_RELEASE=14.5" >> $GITHUB_ENV
           # echo "PostGIS_VER=3.2.3" >> $GITHUB_ENV
           # echo "packed_file=downloads/pocketbase_0.7.2_windows_amd64.zip" >> $GITHUB_ENV
+          # -------------- End of  Test files ------------------------
           echo "files in workspace ${{ github.workspace }} are:"
           ls ${{ github.workspace }}
           echo "---------------------------"
