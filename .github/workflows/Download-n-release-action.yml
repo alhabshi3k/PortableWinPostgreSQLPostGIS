@@ -84,6 +84,9 @@ jobs:
           echo "PG_RELEASE=$PG_RELEASE" >> $GITHUB_ENV
           echo "PostGIS_VER=PostGIS_VER" >> $GITHUB_ENV
           echo "packed_file=$packed_file" >> $GITHUB_ENV
+          echo "::set-output name=PG_RELEASE::$PG_RELEASE"
+          echo "::set-output name=PostGIS_VER::$PostGIS_VER"
+          echo "::set-output name=packed_file::$packed_file"
           echo "files in workspace ${{ github.workspace }} are:"
           ls ${{ github.workspace }}
           echo "---------------------------"
