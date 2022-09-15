@@ -131,7 +131,7 @@ jobs:
             PostgreSQL version is ${{ needs.Download_PostGIS.outputs.PG_RELEASE }}
             PostGIS version is ${{needs.Download_PostGIS.outputs.PostGIS_VER}}
             The PACKED File IS ${{ needs.Download_PostGIS.outputs.packed_file }} OR ${{ env.packed_file }}
-          artifacts: "${{ needs.Download_PostGIS.outputs.packed_file }}"
+          artifacts: "${{ github.workspace }}/downloads/*.*"
 
 
 
