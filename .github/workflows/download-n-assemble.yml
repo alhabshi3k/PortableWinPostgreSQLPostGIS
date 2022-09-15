@@ -94,13 +94,11 @@ jobs:
           echo "files in workspace ${{ github.workspace }}/downloads are:"
           ls ${{ github.workspace }}/downloads
           echo "---------------------------"
-          echo "🍏 This job's status is ${{ job.status }}."        
-      - id: upload_artifact
-        uses: actions/upload-artifact@master
+          echo "🍏 This job's status is ${{ job.status }}."  
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
         with:
-          name: new_packed_file
           files: ${{ github.workspace }}/${{ steps.get_versions.outputs.packed_file}}
 
-          # path: downloads/${{ steps.get_versions.outputs.packed_file}}
-          if-no-files-found: error # 'warn' or 'ignore' are also available, defaults to `warn`
           
