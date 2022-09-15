@@ -101,7 +101,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: "${{ github.workspace }}/${{ steps.get_versions.outputs.packed_file}}"
           # bodyFile: "body.md"
-          tag : 'pg${{ needs.Download_PostGIS.outputs.PG_RELEASE }}-postgis-${{needs.Download_PostGIS.outputs.PostGIS_VER}}'
+          # tag : 'pg${{ needs.Download_PostGIS.outputs.PG_RELEASE }}-postgis-${{needs.Download_PostGIS.outputs.PostGIS_VER}}'
 
 
 
