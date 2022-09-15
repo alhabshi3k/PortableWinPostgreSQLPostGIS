@@ -116,7 +116,7 @@ jobs:
           ls ${{ github.workspace }}
           echo "---------------------------"
       - name: Release-Action
-        uses: "ncipollo/release-action@Latest"
+        uses: "ncipollo/release-action@v1"
         with:
           # token: ${{ secrets.GITHUB_TOKEN }}
           # title: "Development Build, preRelease and a Draft"
