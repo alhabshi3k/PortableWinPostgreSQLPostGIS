@@ -139,8 +139,9 @@ jobs:
             A Good start 
             ${{ needs.Download_PostGIS.outputs.changelog }}
             PostgreSQL version, using "needs.Download_PostGIS.outputs", is ${{ needs.Download_PostGIS.outputs.PG_RELEASE }}
-            PostgreSQL version, using "obs.Download_PostGIS.env", is ${{ jobs.Download_PostGIS.env.PG_RELEASE }}
-            PostgreSQL version, using "obs.Download_PostGIS.steps.get_versions.env", is ${{ jobs.Download_PostGIS.steps.get_versions.env.PG_RELEASE }}
+            PostgreSQL version, using "env", is ${{ env.PG_RELEASE }}
+            PostgreSQL version, using "jobs.Download_PostGIS.env", is $/{/{/ jobs.Download_PostGIS.env.PG_RELEASE }/}/
+            PostgreSQL version, using "jobs.Download_PostGIS.steps.get_versions.env", is ${{ jobs.Download_PostGIS.steps.get_versions.env.PG_RELEASE }}
             PostGIS version is ${{needs.Download_PostGIS.outputs.PostGIS_VER}}
             The PACKED File IS ${{ needs.Download_PostGIS.outputs.packed_file }} OR ${{ env.packed_file }}
           artifacts: "${{ github.workspace }}/downloads/*.*"
