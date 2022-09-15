@@ -99,7 +99,12 @@ jobs:
           echo "files in workspace ${{ github.workspace }}/downloads are:"
           ls ${{ github.workspace }}/downloads
           echo "---------------------------"
-          echo "🍏 This job's status is ${{ job.status }}."  
+          echo "🍏 This job's status is ${{ job.status }}."
+
+  release:
+    runs-on: ubuntu-latest
+    needs: [ Download_PostGIS ]
+    steps:  
       - name: Release
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
