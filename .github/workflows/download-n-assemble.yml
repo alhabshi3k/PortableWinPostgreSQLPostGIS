@@ -99,6 +99,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         # if: startsWith(github.ref, 'refs/tags/')
         with:
+          tags : 'pg${{ needs.Download_PostGIS.outputs.PG_RELEASE }}-postgis-${{needs.Download_PostGIS.outputs.PostGIS_VER}}'
           files: ${{ github.workspace }}/${{ steps.get_versions.outputs.packed_file}}
 
           
