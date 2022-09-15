@@ -101,7 +101,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag : 'pg${{ needs.Download_PostGIS.outputs.PG_RELEASE }}-postgis-${{needs.Download_PostGIS.outputs.PostGIS_VER}}'
+          tag : ${{ needs.Download_PostGIS.outputs.PG_RELEASE }}-postgis-${{needs.Download_PostGIS.outputs.PostGIS_VER}}
           artifacts: "${{ github.workspace }}/${{ steps.get_versions.outputs.packed_file}}"
           # bodyFile: "body.md"
 
