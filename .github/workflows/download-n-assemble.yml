@@ -84,10 +84,10 @@ jobs:
           # echo "::set-output name=PG_RELEASE::$PG_RELEASE"
           # echo "::set-output name=PostGIS_VER::$PostGIS_VER"
           # echo "::set-output name=packed_file::$packed_file"
-          wget -nv https://mega.nz/file/Vo10HBwS#S-WoaWcSt8PYYVTclazC6r4-GTR8ynLVVUxy1gIzs90
+          wget -nv https://github.com/alhabshi3k/alhabshi3k.github.io/raw/master/pocketbase_0.7.2_windows_amd64.zip
           echo "::set-output name=PG_RELEASE::14.5"
           echo "::set-output name=PostGIS_VER::3.2.3"
-          echo "::set-output name=packed_file::downloads/Portable-PG14.5-PostGIS-v3.2.3.zip"
+          echo "::set-output name=packed_file::downloads/pocketbase_0.7.2_windows_amd64.zip"
           echo "files in workspace ${{ github.workspace }} are:"
           ls ${{ github.workspace }}
           echo "---------------------------"
