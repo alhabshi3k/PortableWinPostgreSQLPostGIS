@@ -97,7 +97,7 @@ jobs:
           echo "🍏 This job's status is ${{ job.status }}."  
       - name: Release
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
+        # if: startsWith(github.ref, 'refs/tags/')
         with:
           files: ${{ github.workspace }}/${{ steps.get_versions.outputs.packed_file}}
 
