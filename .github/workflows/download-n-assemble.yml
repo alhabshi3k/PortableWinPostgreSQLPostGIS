@@ -58,6 +58,8 @@ jobs:
       packed_file: ${{ steps.get_versions.outputs.packed_file}}
       changelog: |
          Updates and upgrades to PostgreSQL ${{ steps.get_versions.outputs.PG_RELEASE}} and PostGIS ${{ steps.get_versions.outputs.PostGIS_VER}}
+    permissions:
+      contents: write
     steps:
       - uses: actions/setup-python@master
         with:
