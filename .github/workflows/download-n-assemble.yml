@@ -133,6 +133,12 @@ jobs:
           draft: true
           files: "${{ github.workspace }}/${{ needs.Download_PostGIS.outputs.packed_file}}"
           # bodyFile: "body.md"
+          body: |
+            A Good start 
+            ${{ needs.Download_PostGIS.outputs.changelog }}
+            PostgreSQL version is ${{ needs.Download_PostGIS.outputs.PG_RELEASE }}
+            PostGIS version is ${{needs.Download_PostGIS.outputs.PostGIS_VER}}
+            The PACKED File IS ${{ needs.Download_PostGIS.outputs.packed_file }} OR ${{ steps.create_release.env.packed_file }}
 
 
 
