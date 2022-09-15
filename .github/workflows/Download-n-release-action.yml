@@ -105,7 +105,6 @@ jobs:
           echo "----------- Before_I_finish ------------"
           echo "the filepath to download is ${{ env.packed_file}}"
           echo "------------ ----- Or ----- ---------"
-          echo "the filepath to download is ${{ get_versions.env.packed_file}}"
           echo "the filepath to download is ${{ steps.get_versions.outputs.packed_file}}"
           echo "------------ ----- Or 2 ----- ---------"
           echo "the filepath to download is ${{ outputs.packed_file}}"
