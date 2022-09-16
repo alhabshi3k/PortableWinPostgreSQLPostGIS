@@ -48,7 +48,7 @@ on:
 env:
   ARCH: x64
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-  prerelease: true
+  prerelease: false
   draft: false
 jobs:
   Download_PostGIS:     
@@ -139,17 +139,12 @@ jobs:
           tag : "${{ env.tag_n }}"
 
           body: |
-
             ${{ needs.Download_PostGIS.outputs.changelog }}
             
-            env is  ${{ toJSON(env) }}
-
-            This is the ${{ env.ATTEMPT_NO }} Attempt 
-            PostgreSQL version is ${{ env.PG_RELEASE }}
-            PostGIS version is ${{ env.PostGIS_VER}}
-            ----
-            The PACKED File IS ${{ needs.Download_PostGIS.outputs.packed_file }}
-            ----
+            - PostgreSQL version ${{ env.PG_RELEASE }} with PostGIS version is ${{ env.PostGIS_VER}}
+            - This is the ${{ env.ATTEMPT_NO }} Compilation Attempt , 
+            - The PACKED File IS ${{ needs.Download_PostGIS.outputs.packed_file }}
+           
           artifacts: "${{ github.workspace }}/downloads/*.*"
 
 
