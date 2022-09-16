@@ -114,8 +114,8 @@ jobs:
       - name: set env
         run: |
           echo "NOW=$(date +'%b.%a.%H.%M')" >> $GITHUB_ENV
-          echo "ATTEMPT_NO=$GITHUB_RUN_NUMBER . $GITHUB_RUN_ATTEMPT" >> $GITHUB_ENV
-          echo "ATTEMPT Number is $GITHUB_RUN_NUMBER . $GITHUB_RUN_ATTEMPT "
+          echo "ATTEMPT_NO=$GITHUB_RUN_NUMBER.$GITHUB_RUN_ATTEMPT" >> $GITHUB_ENV
+          echo "ATTEMPT Number is $GITHUB_RUN_NUMBER.$GITHUB_RUN_ATTEMPT "
           echo "files in workspace ${{ github.workspace }} are:"
           ls ${{ github.workspace }}
           echo "---------------------------"
@@ -123,7 +123,7 @@ jobs:
       - name: Release-Action
         uses: "ncipollo/release-action@v1"  # This action script do not response to the "latest" keyword
         with:
-          tag : "PG${{ needs.Download_PostGIS.outputs.PG_RELEASE }}-postgis-${{ needs.Download_PostGIS.outputs.PostGIS_VER}}-($GITHUB_RUN_NUMBER-$GITHUB_RUN_ATTEMPT)-${{ env.NOW }}"
+          tag : "PG${{ needs.Download_PostGIS.outputs.PG_RELEASE }}-postgis-${{ needs.Download_PostGIS.outputs.PostGIS_VER}}-${{ env.ATTEMPT_NO }}-${{ env.NOW }}"
           prerelease: true
           draft: true
           body: |
