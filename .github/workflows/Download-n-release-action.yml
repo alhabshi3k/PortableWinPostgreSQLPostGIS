@@ -126,26 +126,16 @@ jobs:
       - name: Release-Action
         uses: "ncipollo/release-action@v1"  # This action script do not response to the "latest" keyword
         with:
-          # token: ${{ secrets.GITHUB_TOKEN }}
-          # title: "Development Build, preRelease and a Draft"
-          # automatic_release_tag: "PG${{ needs.Download_PostGIS.outputs.PG_RELEASE }}-postgis-${{ needs.Download_PostGIS.outputs.PostGIS_VER}}-${{ env.NOW }}"
-          tag : "PG${{ needs.Download_PostGIS.outputs.PG_RELEASE }}-postgis-${{ needs.Download_PostGIS.outputs.PostGIS_VER}}-${{ env.NOW }}"
+          tag : "PG${{ needs.Download_PostGIS.outputs.PG_RELEASE }}-postgis-${{ needs.Download_PostGIS.outputs.PostGIS_VER}}-$GITHUB_RUN_NUMBER.$GITHUB_RUN_ATTEMPT-${{ env.NOW }}"
+
           prerelease: true
           draft: true
-          # files: "${{ github.workspace }}/${{ needs.Download_PostGIS.outputs.packed_file}}"
           body: |
             A Good start 
             ${{ needs.Download_PostGIS.outputs.changelog }}
             PostgreSQL version, using "needs.Download_PostGIS.outputs", is ${{ needs.Download_PostGIS.outputs.PG_RELEASE }}
-            PostgreSQL version, using "env", is ${{ env.PG_RELEASE }}
-            Env contexts:
-            -----
-            ${{ toJSON(env) }}
-            -----
-            PostgreSQL version, using "jobs.Download_PostGIS.env", is $/{/{/ jobs.Download_PostGIS.env.PG_RELEASE }/}/
-            PostgreSQL version, using "jobs.Download_PostGIS.steps.get_versions.env", is $/{/{/ jobs.Download_PostGIS.steps.get_versions.env.PG_RELEASE }/}/
             PostGIS version is ${{needs.Download_PostGIS.outputs.PostGIS_VER}}
-            The PACKED File IS ${{ needs.Download_PostGIS.outputs.packed_file }} OR ${{ env.packed_file }}
+            The PACKED File IS ${{ needs.Download_PostGIS.outputs.packed_file }}
           artifacts: "${{ github.workspace }}/downloads/*.*"
 
 
