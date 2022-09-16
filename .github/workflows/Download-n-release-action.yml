@@ -106,7 +106,7 @@ jobs:
     env:
       PG_RELEASE: ${{ needs.Download_PostGIS.outputs.PG_RELEASE }}
       PostGIS_VER: ${{ needs.Download_PostGIS.outputs.PostGIS_VER}}
-      tag_prefix : PG${{ needs.Download_PostGIS.outputs.PG_RELEASE }}-postgis-${{ env.PostGIS_VER }}
+      tag_prefix : PG${{ needs.Download_PostGIS.outputs.PG_RELEASE }}-postgis-${{ needs.Download_PostGIS.outputs.PostGIS_VER}}
     steps:
 
       - name: Download math result for job 2
