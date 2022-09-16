@@ -126,7 +126,7 @@ jobs:
           echo "---------------------------"
           if [ $draft ]; then
           echo "tag_n=$tag_prefix-$GITHUB_RUN_NUMBER.$GITHUB_RUN_ATTEMPT" >> $GITHUB_ENV
-          elif [ !$draft && $prerelease ]; then
+          elif [ $prerelease ]; then
           echo "tag_n=$tag_prefix-prerelease_$GITHUB_RUN_NUMBER.$GITHUB_RUN_ATTEMPT" >> $GITHUB_ENV
           else
           echo "tag_n=$tag_prefix" >> $GITHUB_ENV
