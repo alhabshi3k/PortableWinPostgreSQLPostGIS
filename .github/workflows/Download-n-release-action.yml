@@ -48,7 +48,7 @@ on:
 env:
   ARCH: x64
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-  PG_RELEASE: ${{ steps.get_versions.outputs.PG_RELEASE}}
+  PG_RELEASE: ${{ jobs.Download_PostGIS.steps.get_versions.outputs.PG_RELEASE}}
 jobs:
   Download_PostGIS:     
     runs-on: ubuntu-latest # 20.04.4
