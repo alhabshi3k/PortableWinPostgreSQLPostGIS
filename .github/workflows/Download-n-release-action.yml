@@ -142,7 +142,7 @@ jobs:
 
             ${{ needs.Download_PostGIS.outputs.changelog }}
             
-            env is  $ {{ toJSON(env) }}
+            env is  ${{ toJSON(env) }}
 
             This is the ${{ env.ATTEMPT_NO }} Attempt 
             PostgreSQL version is ${{ env.PG_RELEASE }}
