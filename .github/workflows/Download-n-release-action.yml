@@ -82,6 +82,7 @@ jobs:
           echo "**$(python --version) is used for processing the script **"
           # The Python script will do most of th job, including MkDir downloads
           read -r PG_RELEASE pg_link PostGIS_VER postgis_link packed_file <<<$(python .github/workflows/get-links_postgreSQL-PostGIS.py)
+          # # echo "packed_file=$packed_file" >> $GITHUB_ENV
           echo "::set-output name=PG_RELEASE::$PG_RELEASE"
           echo "::set-output name=PostGIS_VER::$PostGIS_VER"
           echo "::set-output name=packed_file::$packed_file"
@@ -98,12 +99,12 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: new_packed_file
-          path: ${{ github.workspace }}/${{ env.packed_file}}
+          path: ${{ github.workspace }}/${{ steps.get_versions.outputs.packed_file}}
           if-no-files-found: error # 'warn' or 'ignore' are also available, defaults to `warn`
       - id: Before_I_finish
         run: |
           echo "------------ ----- Or ----- ---------"
-          echo "the filepath to download is $packed_file"
+          echo "the filepath to download is ${{ steps.get_versions.outputs.packed_file}}"
 
 
   release:
@@ -117,17 +118,18 @@ jobs:
         with:
           name: new_packed_file
           path: downloads
+
       - name: set env
         run: |
           echo "NOW=$(date +'%b.%a.%H.%M')" >> $GITHUB_ENV
           echo "files in workspace ${{ github.workspace }} are:"
           ls ${{ github.workspace }}
           echo "---------------------------"
+
       - name: Release-Action
         uses: "ncipollo/release-action@v1"  # This action script do not response to the "latest" keyword
         with:
           tag : "PG${{ needs.Download_PostGIS.outputs.PG_RELEASE }}-postgis-${{ needs.Download_PostGIS.outputs.PostGIS_VER}}-$GITHUB_RUN_NUMBER.$GITHUB_RUN_ATTEMPT-${{ env.NOW }}"
-
           prerelease: true
           draft: true
           body: |
@@ -135,7 +137,7 @@ jobs:
             ${{ needs.Download_PostGIS.outputs.changelog }}
             PostgreSQL version, using "needs.Download_PostGIS.outputs", is ${{ needs.Download_PostGIS.outputs.PG_RELEASE }}
             PostGIS version is ${{needs.Download_PostGIS.outputs.PostGIS_VER}}
-            The PACKED File IS ${{ needs.Download_PostGIS.outputs.packed_file }}
+            The PACKED File IS ${{ needs.Download_PostGIS.outputs.packed_file }} OR ${{ env.packed_file }}
           artifacts: "${{ github.workspace }}/downloads/*.*"
 
 
