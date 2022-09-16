@@ -48,7 +48,7 @@ on:
 env:
   ARCH: x64
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-  PG_RELEASE: ${{ jobs.Download_PostGIS.steps.get_versions.outputs.PG_RELEASE}}
+  # PG_RELEASE: ${{ jobs.Download_PostGIS.steps.get_versions.outputs.PG_RELEASE}}
 jobs:
   Download_PostGIS:     
     runs-on: ubuntu-latest # 20.04.4
@@ -141,6 +141,14 @@ jobs:
             ${{ needs.Download_PostGIS.outputs.changelog }}
             PostgreSQL version, using "needs.Download_PostGIS.outputs", is ${{ needs.Download_PostGIS.outputs.PG_RELEASE }}
             PostgreSQL version, using "env", is ${{ env.PG_RELEASE }}
+            Env contexts:
+            -----
+            ${{ toJSON(env) }}
+            -----
+            Jobs contexts:
+            -----
+            ${{ toJSON(jobs) }}
+            -----
             PostgreSQL version, using "jobs.Download_PostGIS.env", is $/{/{/ jobs.Download_PostGIS.env.PG_RELEASE }/}/
             PostgreSQL version, using "jobs.Download_PostGIS.steps.get_versions.env", is $/{/{/ jobs.Download_PostGIS.steps.get_versions.env.PG_RELEASE }/}/
             PostGIS version is ${{needs.Download_PostGIS.outputs.PostGIS_VER}}
