@@ -124,9 +124,9 @@ jobs:
           echo "files in workspace ${{ github.workspace }} are:"
           ls ${{ github.workspace }}
           echo "---------------------------"
-          if [ $draft ]; then
+          if [ $draft == "true" ]; then
           echo "tag_n=$tag_prefix-$GITHUB_RUN_NUMBER.$GITHUB_RUN_ATTEMPT" >> $GITHUB_ENV
-          elif [ $prerelease ]; then
+          elif [ $prerelease == "true" ]; then
           echo "tag_n=$tag_prefix-prerelease_$GITHUB_RUN_NUMBER.$GITHUB_RUN_ATTEMPT" >> $GITHUB_ENV
           else
           echo "tag_n=$tag_prefix" >> $GITHUB_ENV
