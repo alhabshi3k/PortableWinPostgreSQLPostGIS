@@ -82,7 +82,6 @@ jobs:
           echo "**$(python --version) is used for processing the script **"
           # The Python script will do most of th job, including MkDir downloads
           read -r PG_RELEASE pg_link PostGIS_VER postgis_link packed_file <<<$(python .github/workflows/get-links_postgreSQL-PostGIS.py)
-          # # echo "packed_file=$packed_file" >> $GITHUB_ENV
           echo "::set-output name=PG_RELEASE::$PG_RELEASE"
           echo "::set-output name=PostGIS_VER::$PostGIS_VER"
           echo "::set-output name=packed_file::$packed_file"
@@ -91,8 +90,6 @@ jobs:
           echo "---------------------------"
           echo "files in workspace ${{ github.workspace }}/downloads are:"
           ls ${{ github.workspace }}/downloads
-          echo "------------- So the varible------------"
-          echo "the filepath to download is ${{ steps.get_versions.outputs.packed_file}}"
           echo "------------ -----  ----- ---------"
           echo "🍏 This job's status is ${{ job.status }}."
       - id: upload_artifact
@@ -101,11 +98,6 @@ jobs:
           name: new_packed_file
           path: ${{ github.workspace }}/${{ steps.get_versions.outputs.packed_file}}
           if-no-files-found: error # 'warn' or 'ignore' are also available, defaults to `warn`
-      - id: Before_I_finish
-        run: |
-          echo "------------ ----- Or ----- ---------"
-          echo "the filepath to download is ${{ steps.get_versions.outputs.packed_file}}"
-
 
   release:
     runs-on: ubuntu-latest
@@ -122,6 +114,8 @@ jobs:
       - name: set env
         run: |
           echo "NOW=$(date +'%b.%a.%H.%M')" >> $GITHUB_ENV
+          echo "ATTEMPT_NO=$GITHUB_RUN_NUMBER . $GITHUB_RUN_ATTEMPT" >> $GITHUB_ENV
+          echo "ATTEMPT Number is $GITHUB_RUN_NUMBER . $GITHUB_RUN_ATTEMPT "
           echo "files in workspace ${{ github.workspace }} are:"
           ls ${{ github.workspace }}
           echo "---------------------------"
@@ -129,15 +123,19 @@ jobs:
       - name: Release-Action
         uses: "ncipollo/release-action@v1"  # This action script do not response to the "latest" keyword
         with:
-          tag : "PG${{ needs.Download_PostGIS.outputs.PG_RELEASE }}-postgis-${{ needs.Download_PostGIS.outputs.PostGIS_VER}}-$GITHUB_RUN_NUMBER.$GITHUB_RUN_ATTEMPT-${{ env.NOW }}"
+          tag : "PG${{ needs.Download_PostGIS.outputs.PG_RELEASE }}-postgis-${{ needs.Download_PostGIS.outputs.PostGIS_VER}}-($GITHUB_RUN_NUMBER-$GITHUB_RUN_ATTEMPT)-${{ env.NOW }}"
           prerelease: true
           draft: true
           body: |
-            A Good start 
+
             ${{ needs.Download_PostGIS.outputs.changelog }}
-            PostgreSQL version, using "needs.Download_PostGIS.outputs", is ${{ needs.Download_PostGIS.outputs.PG_RELEASE }}
+            
+            This is the ${{ env.ATTEMPT_NO }} Attempt 
+            PostgreSQL version is ${{ needs.Download_PostGIS.outputs.PG_RELEASE }}
             PostGIS version is ${{needs.Download_PostGIS.outputs.PostGIS_VER}}
-            The PACKED File IS ${{ needs.Download_PostGIS.outputs.packed_file }} OR ${{ env.packed_file }}
+            ----
+            The PACKED File IS ${{ needs.Download_PostGIS.outputs.packed_file }}
+            ----
           artifacts: "${{ github.workspace }}/downloads/*.*"
 
 
