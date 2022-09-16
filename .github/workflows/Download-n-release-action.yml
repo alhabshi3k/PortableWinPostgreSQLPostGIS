@@ -49,7 +49,7 @@ env:
   ARCH: x64
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
   prerelease: true
-  draft: true
+  draft: false
 jobs:
   Download_PostGIS:     
     runs-on: ubuntu-latest # 20.04.4
@@ -125,7 +125,9 @@ jobs:
           ls ${{ github.workspace }}
           echo "---------------------------"
           if [ $draft ]; then
-          echo "tag_n=$tag_prefix-$ATTEMPT_NO" >> $GITHUB_ENV
+          echo "tag_n=$tag_prefix-$GITHUB_RUN_NUMBER.$GITHUB_RUN_ATTEMPT" >> $GITHUB_ENV
+          elif [ !$draft && $prerelease ]; then
+          echo "tag_n=$tag_prefix-prerelease_$GITHUB_RUN_NUMBER.$GITHUB_RUN_ATTEMPT" >> $GITHUB_ENV
           else
           echo "tag_n=$tag_prefix" >> $GITHUB_ENV
           fi
